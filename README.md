@@ -13,6 +13,8 @@ Doctors:
 8)	View treatment plans (diagnosis, treatment and price)
 9)	View who are their patients and their information.
 10)	The application can be switched between French and English.
+
+
 Patients:
 1)	Create appointment.
 2)	View appointment.
