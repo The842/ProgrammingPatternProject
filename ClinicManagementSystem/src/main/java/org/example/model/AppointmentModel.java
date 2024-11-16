@@ -5,13 +5,11 @@ import java.util.Date;
 import java.util.Objects;
 
 public class AppointmentModel {
-
     private int appointmentId;
     private Date appointmentDate;
     private Time appointmentTime;
     private int doctorID;
     private int patientID;
-
 
     public AppointmentModel(int id, Date appointmentDate, Time appointmentTime, int doctorID, int patientID) {
         this.appointmentId = id;

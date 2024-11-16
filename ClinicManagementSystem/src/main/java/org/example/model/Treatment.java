@@ -1,7 +1,6 @@
 package org.example.model;
 
 public class Treatment {
-
     private String name;
     private String description;
 
@@ -9,7 +8,6 @@ public class Treatment {
         this.name = name;
         this.description = description;
     }
-
 
     public String getName() {
         return name;

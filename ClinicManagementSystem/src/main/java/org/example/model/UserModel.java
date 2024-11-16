@@ -87,6 +87,7 @@ public abstract class UserModel implements Login {
 
     /**
      * This method check if the id is positive
+     *
      * @param id is the id
      * @return true if the id is positive and false if negative
      */
@@ -96,6 +97,7 @@ public abstract class UserModel implements Login {
 
     /**
      * This method checks if the last name is not null, not empty and are letters
+     *
      * @param lastName is the last name
      * @return true if the last name is valid or false if it is not valid.
      */

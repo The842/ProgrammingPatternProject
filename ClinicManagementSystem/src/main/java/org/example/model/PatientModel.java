@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PatientModel extends UserModel {
-
     private List<PatientModel> patients;
 
     public PatientModel(String lastName, int id, String firstName, String phoneNumber, String address) {
@@ -30,6 +29,7 @@ public class PatientModel extends UserModel {
 
     /**
      * This method check if the patient user is found in the list of patients and validates.
+     *
      * @return true if the patient user is valid and false if the patient is invalid.
      */
     @Override

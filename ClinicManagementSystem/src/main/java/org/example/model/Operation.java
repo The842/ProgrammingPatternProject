@@ -2,34 +2,14 @@ package org.example.model;
 
 import java.util.Date;
 
-public class Operation {
-
-    private String name;
-    private String description;
+public class Operation extends Treatment {
     private String surgeonName;
     private Date date;
 
     public Operation(String name, String description, String surgeonName, Date date) {
-        this.name = name;
-        this.description = description;
+        super(name, description);
         this.surgeonName = surgeonName;
         this.date = date;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getSurgeonName() {
@@ -51,9 +31,7 @@ public class Operation {
     @Override
     public String toString() {
         return "Operation{" +
-                "name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", surgeonName='" + surgeonName + '\'' +
+                "surgeonName='" + surgeonName + '\'' +
                 ", date=" + date +
                 '}';
     }

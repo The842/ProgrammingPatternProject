@@ -3,7 +3,6 @@ package org.example.model;
 import java.util.Objects;
 
 public class MedicalRecordModel {
-
     private int medicalRecordID;
     private int appointmentID;
     private String diagnosis;

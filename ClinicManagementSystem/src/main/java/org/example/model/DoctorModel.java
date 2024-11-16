@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DoctorModel extends UserModel {
-
     private List<DoctorModel> doctors;
 
     public DoctorModel(String lastName, int id, String firstName, String phoneNumber, String address) {
