@@ -64,4 +64,26 @@ public class AppointmentController {
             System.out.println("Appointment not found.");
         }
     }
+
+    /**
+     * View an appointment by its ID.
+     * @param appointmentId the ID of the appointment to view
+     */
+    public void viewAppointment(int appointmentId) {
+        AppointmentModel appointment = AppointmentDML.getAppointmentById(appointmentId);
+        if (appointment != null) {
+            System.out.println("Appointment Details: " + appointment);
+        } else {
+            System.out.println("Appointment not found.");
+        }
+    }
+
+    /**
+     * View all appointments for a given doctor.
+     * @param doctorId the ID of the doctor
+     */
+    public void viewAppointmentsByDoctor(int doctorId) {
+        System.out.println("Appointments for Doctor ID: " + doctorId);
+        AppointmentDML.getAllAppointments(doctorId).forEach(System.out::println);
+    }
 }
