@@ -25,4 +25,24 @@ public class MedicalRecordController {
             System.out.println("Medical Record not found for patient ID: " + patientId);
         }
     }
+
+    /**
+     * Update the medical record for a patient.
+     * @param patientId the ID of the patient whose record will be updated
+     * @param newDiagnosis the new diagnosis to update
+     * @param newTreatment the new treatment plan to update
+     */
+    public void updateMedicalRecord(int patientId, String newDiagnosis, String newTreatment) {
+        MedicalRecordModel medicalRecord = MedicalRecordDML.getMedicalRecordById(patientId);
+
+        if (medicalRecord != null) {
+            medicalRecord.setDiagnosis(newDiagnosis);
+            medicalRecord.setTreatment(newTreatment);
+
+            MedicalRecordDML.updateMedicalRecord(medicalRecord);
+            System.out.println("Medical Record updated successfully for Patient ID: " + patientId);
+        } else {
+            System.out.println("Medical Record not found for patient ID: " + patientId);
+        }
+    }
 }
