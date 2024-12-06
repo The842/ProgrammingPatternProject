@@ -45,4 +45,18 @@ public class MedicalRecordController {
             System.out.println("Medical Record not found for patient ID: " + patientId);
         }
     }
+
+    /**
+     * View a medical record by its ID.
+     * @param medicalRecordId the ID of the medical record
+     */
+    public void viewMedicalRecordById(int medicalRecordId) {
+        MedicalRecordModel medicalRecord = MedicalRecordDML.getMedicalRecordById(medicalRecordId);
+
+        if (medicalRecord != null) {
+            System.out.println("Medical Record Details: " + medicalRecord);
+        } else {
+            System.out.println("Medical Record not found.");
+        }
+    }
 }
