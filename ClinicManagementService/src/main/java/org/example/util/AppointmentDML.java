@@ -52,7 +52,7 @@ public class AppointmentDML {
             stmt.setString(2, appointment.getAppointmentTime().toString());
             stmt.setInt(3, appointment.getDoctorID());
             stmt.setInt(4, appointment.getPatientID());
-            stmt.setInt(5, appointment.getId());
+            stmt.setInt(5, appointment.getAppointmentId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

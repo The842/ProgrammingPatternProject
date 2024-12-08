@@ -1,12 +1,15 @@
 package org.example.controller;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import org.example.model.DoctorModel;
+import org.example.model.PatientModel;
+
+import java.sql.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class DatabaseController {
     public static final String BASE_URL = "jdbc:sqlite:./src/main/resources/database/data.db";
+    private static final ReentrantReadWriteLock LOCK = new ReentrantReadWriteLock();
+
     private static Connection getConnection() {
         Connection connection;
 
@@ -19,6 +22,9 @@ public class DatabaseController {
         return connection;
     }
 
+    /**
+     * create doctor table
+     */
     public static void createDoctorTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS doctor (
@@ -31,7 +37,9 @@ public class DatabaseController {
                 """;
         executeSQL(sql);
     }
-
+    /**
+     * create patient table
+     */
     public static void createPatientTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS patient (
@@ -44,7 +52,9 @@ public class DatabaseController {
                 """;
         executeSQL(sql);
     }
-
+    /**
+     * create appointment table
+     */
     public static void createAppointmentTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS appointment (
@@ -59,7 +69,9 @@ public class DatabaseController {
                 """;
         executeSQL(sql);
     }
-
+    /**
+     * create treatment table
+     */
     public static void createTreatmentTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS treatment (
@@ -71,7 +83,9 @@ public class DatabaseController {
                 """;
         executeSQL(sql);
     }
-
+    /**
+     * create medicine table
+     */
     public static void createMedicineTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS medicine (
@@ -83,7 +97,9 @@ public class DatabaseController {
                 """;
         executeSQL(sql);
     }
-
+    /**
+     * create operation table
+     */
     public static void createOperationTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS operation (
@@ -95,7 +111,9 @@ public class DatabaseController {
                 """;
         executeSQL(sql);
     }
-
+    /**
+     * create medical record table
+     */
     public static void createMedicalRecordTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS medicalRecord (
@@ -110,7 +128,6 @@ public class DatabaseController {
         executeSQL(sql);
     }
 
-    // General SQL executor
     private static void executeSQL(String sql) {
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()) {
@@ -119,4 +136,51 @@ public class DatabaseController {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Adds a doctor
+     * @param doctor doctor to insert
+     */
+    public static void insertDoctor(DoctorModel doctor) {
+        LOCK.writeLock().lock();
+        String sql = "INSERT INTO doctor (id, firstName, lastName, phoneNumber, address) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, doctor.getId());
+            statement.setString(2, doctor.getFirstName());
+            statement.setString(3, doctor.getLastName());
+            statement.setString(4, doctor.getPhoneNumber());
+            statement.setString(5, doctor.getAddress());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.writeLock().unlock();
+        }
+    }
+
+    /**
+     * Adds a patient
+     * @param patient patient to add
+     */
+    public static void insertPatient(PatientModel patient) {
+        LOCK.writeLock().lock();
+        String sql = "INSERT INTO patient (id, firstName, lastName, phoneNumber, address) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, patient.getId());
+            statement.setString(2, patient.getFirstName());
+            statement.setString(3, patient.getLastName());
+            statement.setString(4, patient.getPhoneNumber());
+            statement.setString(5, patient.getAddress());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.writeLock().unlock();
+        }
+    }
+
 }

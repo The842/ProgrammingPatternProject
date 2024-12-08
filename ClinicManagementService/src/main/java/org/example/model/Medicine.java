@@ -10,10 +10,10 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class Medicine extends Treatment {
-    private DoctorModel doctor;
+    private int doctorId;
 
-    public Medicine(String name, String description, DoctorModel doctor) {
+    public Medicine(String name, String description, int doctorId) {
         super(name, description);
-        this.doctor = doctor;
+        this.doctorId = doctorId;
     }
 }
