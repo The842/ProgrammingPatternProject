@@ -12,8 +12,8 @@ import lombok.ToString;
 public class Medicine extends Treatment {
     private int doctorId;
 
-    public Medicine(String name, String description, int doctorId) {
-        super(name, description);
+    public Medicine(int id,String name, String description, int doctorId) {
+        super(id,name, description);
         this.doctorId = doctorId;
     }
 }

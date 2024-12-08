@@ -8,11 +8,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Treatment {
+    private int id;
     private String name;
     private String description;
     private DoctorModel doctor;
 
-    public Treatment(String name, String description) {
+    public Treatment(int id,String name, String description) {
+        this.id=id;
         this.name = name;
         this.description = description;
     }

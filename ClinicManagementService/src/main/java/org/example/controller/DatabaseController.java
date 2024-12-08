@@ -1,7 +1,6 @@
 package org.example.controller;
 
-import org.example.model.DoctorModel;
-import org.example.model.PatientModel;
+import org.example.model.*;
 
 import java.sql.*;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -183,4 +182,106 @@ public class DatabaseController {
         }
     }
 
+    /**
+     * Adds an appointment
+     * @param appointment appointment to add
+     */
+    public static void insertAppointment(AppointmentModel appointment) {
+        LOCK.writeLock().lock();
+        String sql = "INSERT INTO appointment (id, appointmentDate, appointmentTime, doctorId, patientId) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, appointment.getAppointmentId());
+            statement.setString(2, appointment.getAppointmentDate().toString());
+            statement.setString(3, appointment.getAppointmentTime().toString());
+            statement.setInt(4, appointment.getDoctorID());
+            statement.setInt(5, appointment.getPatientID());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.writeLock().unlock();
+        }
+    }
+
+    /**
+     * Adds treatment based on either medicine or operation
+     * @param treatment
+     */
+    public static void insertTreatment(Treatment treatment) {
+        LOCK.writeLock().lock();
+        String sql = "INSERT INTO treatment (id, name, description, type) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, treatment.getId());
+            statement.setString(2, treatment.getName());
+            statement.setString(3, treatment.getDescription());
+            statement.setString(4, treatment instanceof Medicine ? "Medicine" : "Operation");
+            statement.executeUpdate();
+
+            if (treatment instanceof Medicine) {
+                insertMedicine((Medicine) treatment);
+            } else if (treatment instanceof Operation) {
+                insertOperation((Operation) treatment);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.writeLock().unlock();
+        }
+    }
+
+    /**
+     * Helper method for inserting treatment. It inserts medicine information if the treatment is medicine
+     * @param medicine medicine to add
+     */
+    private static void insertMedicine(Medicine medicine)  {
+        String sql = "INSERT INTO medicine (id, doctorId) VALUES (?, ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, medicine.getId());
+            statement.setLong(2, medicine.getDoctorId());
+            statement.executeUpdate();
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    private static void insertOperation(Operation operation)  {
+        String sql = "INSERT INTO operation (id, surgeonName, operationDate) VALUES (?, ?, ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, operation.getId());
+            statement.setString(2, operation.getSurgeonName());
+            statement.setString(3, operation.getDate().toString());
+            statement.executeUpdate();
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Adds a medical record
+     * @param record record to insert
+     */
+    public static void insertMedicalRecord(MedicalRecordModel record) {
+        LOCK.writeLock().lock();
+        String sql = "INSERT INTO medicalRecord (id, appointmentId, treatmentId, bill) VALUES (?, ?, ?, ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, record.getMedicalRecordID());
+            statement.setInt(2, record.getAppointmentID());
+            statement.setLong(3, record.getTreatment().getId());
+            statement.setDouble(4, record.getBill());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.writeLock().unlock();
+        }
+    }
 }

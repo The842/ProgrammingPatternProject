@@ -14,8 +14,8 @@ public class Operation extends Treatment {
     private String surgeonName;
     private Date date;
 
-    public Operation(String name, String description, String surgeonName, Date date) {
-        super(name, description);
+    public Operation(int id,String name, String description, String surgeonName, Date date) {
+        super(id,name, description);
         this.surgeonName = surgeonName;
         this.date = date;
     }
