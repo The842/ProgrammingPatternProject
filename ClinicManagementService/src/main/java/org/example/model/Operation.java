@@ -33,6 +33,6 @@ public class Operation extends Treatment {
         return "Operation{" +
                 "surgeonName='" + surgeonName + '\'' +
                 ", date=" + date +
-                '}';
+                '}' + super.toString();
     }
 }

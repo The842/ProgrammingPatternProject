@@ -20,6 +20,6 @@ public class Medicine extends Treatment {
     public String toString() {
         return "Medicine{" +
                 "doctor=" + doctor +
-                '}';
+                '}' + super.toString();
     }
 }
