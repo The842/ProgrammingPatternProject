@@ -7,6 +7,8 @@ import org.example.model.Treatment;
 import org.example.util.AppointmentDML;
 import org.example.util.MedicalRecordDML;
 
+import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
 public class DoctorController {
@@ -48,7 +50,7 @@ public class DoctorController {
         System.out.println("Appointment added successfully.");
     }
 
-    public void updateAppointment(int id, java.util.Date newDate, java.sql.Time newTime) {
+    public void updateAppointment(int id, Date newDate, Time newTime) {
         AppointmentModel appointment = AppointmentDML.getAppointmentById(id);
 
         if (appointment != null) {

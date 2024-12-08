@@ -1,6 +1,7 @@
 package org.example.controller;
 
 import org.example.model.MedicalRecordModel;
+import org.example.model.Treatment;
 import org.example.util.MedicalRecordDML;
 
 public class MedicalRecordController {
@@ -32,7 +33,7 @@ public class MedicalRecordController {
      * @param newDiagnosis the new diagnosis to update
      * @param newTreatment the new treatment plan to update
      */
-    public void updateMedicalRecord(int patientId, String newDiagnosis, String newTreatment) {
+    public void updateMedicalRecord(int patientId, String newDiagnosis, Treatment newTreatment) {
         MedicalRecordModel medicalRecord = MedicalRecordDML.getMedicalRecordById(patientId);
 
         if (medicalRecord != null) {

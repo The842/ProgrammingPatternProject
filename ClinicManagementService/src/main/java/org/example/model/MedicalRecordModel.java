@@ -45,9 +45,9 @@ public class MedicalRecordModel {
         return treatment;
     }
 
-    public void setTreatment(String treatment) {
+    public void setTreatment(Treatment treatment) {
         this.treatment = treatment;
-    }
+    }//parameter treatment
 
     public double getBill() {
         return bill;

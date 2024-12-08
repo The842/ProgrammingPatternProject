@@ -84,7 +84,6 @@ public abstract class UserModel implements Login {
 
     public abstract boolean isUserValid(int id, String lastName);
 
-
     /**
      * This method check if the id is positive
      *

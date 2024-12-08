@@ -51,6 +51,3 @@ public class DoctorModel extends UserModel {
         return false;
     }
 }
-
-
-

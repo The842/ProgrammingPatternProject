@@ -17,7 +17,6 @@ public class MedicalRecordModel {
         this.bill = bill;
     }
 
-
     public int getMedicalRecordID() {
         return medicalRecordID;
     }

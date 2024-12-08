@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PatientModel extends UserModel {
-    private int patientId;
+    private int patientId;//don't need it
     private List<PatientModel> patients;
 
     public PatientModel(String lastName, int id, String firstName, String phoneNumber, String address) {
