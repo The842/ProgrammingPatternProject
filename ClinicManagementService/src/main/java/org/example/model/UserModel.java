@@ -1,7 +1,14 @@
 package org.example.model;
 
+import lombok.*;
+
 import java.util.Objects;
 
+@Setter
+@Getter
+@EqualsAndHashCode
+@ToString
+@NoArgsConstructor
 public abstract class UserModel implements Login {
     private int id;
     private static int count;
@@ -16,70 +23,6 @@ public abstract class UserModel implements Login {
         this.firstName = firstName;
         this.phoneNumber = phoneNumber;
         this.address = address;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserModel userModel = (UserModel) o;
-        return id == userModel.id && Objects.equals(lastName, userModel.lastName) && Objects.equals(firstName, userModel.firstName) && Objects.equals(phoneNumber, userModel.phoneNumber) && Objects.equals(address, userModel.address);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, lastName, firstName, phoneNumber, address);
-    }
-
-    @Override
-    public String toString() {
-        return "UserModel{" +
-                "id=" + id +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", address='" + address + '\'' +
-                '}';
     }
 
     public abstract UserModel createUser(String lastName, int id, String firstName, String phoneNumber, String address);
@@ -100,15 +43,21 @@ public abstract class UserModel implements Login {
 
     /**
      * This method checks if the last name is not null, not empty and are letters
-     *
      * @param lastName is the last name
      * @return true if the last name is valid or false if it is not valid.
      */
     boolean isValidLastName(String lastName) {
-        if (lastName != null && !lastName.isEmpty() && lastName.matches("[a-zA-Z]+")) {
+        if (lastName == null || lastName.isEmpty()) {
             return false;
-        } else {
-            return true;
         }
+
+        for (int i = 0; i < lastName.length(); i++) {
+            char c = lastName.charAt(i);
+            if (!Character.isLetter(c)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

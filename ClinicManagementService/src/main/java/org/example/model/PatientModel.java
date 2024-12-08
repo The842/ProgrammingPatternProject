@@ -1,13 +1,14 @@
 package org.example.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Setter
 @Getter
+@ToString
+@NoArgsConstructor
 public class PatientModel extends UserModel {
     private int patientId;
     private List<PatientModel> patients;
@@ -16,13 +17,6 @@ public class PatientModel extends UserModel {
         super(lastName, id, firstName, phoneNumber, address);
         this.patients = new ArrayList<>();
 
-    }
-
-    @Override
-    public String toString() {
-        return "PatientModel{" +
-                "patients=" + patients +
-                '}';
     }
 
     @Override
