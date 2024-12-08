@@ -62,11 +62,11 @@ public class PatientController {
     /**
      * Update an existing appointment for a patient.
      */
-    public void updateAppointmentForPatient(int appointmentId, String newDate, String newTime) {
+    public void updateAppointmentForPatient(int appointmentId, Date newDate, Time newTime) {
         AppointmentModel appointment = AppointmentDML.getAppointmentById(appointmentId);
         if (appointment != null) {
             appointment.setAppointmentDate(newDate);
-            appointment.setAppointmentTime(Time.valueOf(newTime));
+            appointment.setAppointmentTime(newTime);
             AppointmentDML.updateAppointment(appointment);
             System.out.println("Appointment updated successfully.");
         } else {
