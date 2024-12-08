@@ -1,21 +1,20 @@
 package org.example.controller;
 
-import org.example.model.*;
+import org.example.model.AppointmentModel;
+import org.example.model.DoctorModel;
+import org.example.model.MedicalRecordModel;
+import org.example.model.Treatment;
 import org.example.util.AppointmentDML;
 import org.example.util.MedicalRecordDML;
-import org.example.util.PatientDML;
 
-import java.sql.Time;
-import java.util.Date;
 import java.util.List;
 
 public class DoctorController {
-    private final PatientDML patientDML;
+
     private DoctorModel doctor;
 
     public DoctorController(DoctorModel doctor) {
         this.doctor = doctor;
-        patientDML = new PatientDML();
     }
 
     /**
@@ -43,13 +42,13 @@ public class DoctorController {
     /**
      * Add a new appointment for the doctor into the database.
      */
-    public void addAppointment(int id, Date appointmentDate, Time appointmentTime, int patientID) {
+    public void addAppointment(int id, java.util.Date appointmentDate, java.sql.Time appointmentTime, int patientID) {
         AppointmentModel appointment = new AppointmentModel(id, appointmentDate, appointmentTime, doctor.getId(), patientID);
         AppointmentDML.addAppointment(appointment);
         System.out.println("Appointment added successfully.");
     }
 
-    public void updateAppointment(int id, Date newDate, Time newTime) {
+    public void updateAppointment(int id, java.util.Date newDate, java.sql.Time newTime) {
         AppointmentModel appointment = AppointmentDML.getAppointmentById(id);
 
         if (appointment != null) {
@@ -106,22 +105,6 @@ public class DoctorController {
             System.out.println("Medical record deleted successfully.");
         } else {
             System.out.println("Medical record not found.");
-        }
-    }
-
-    /**
-     * View a specific patient by ID.
-     */
-    public void viewPatient(int patientId) {
-        PatientModel patient = patientDML.getAllPatients().stream()
-                .filter(p -> p.getId() == patientId)
-                .findFirst()
-                .orElse(null);
-
-        if (patient != null) {
-            System.out.println(patient);
-        } else {
-            System.out.println("Patient not found.");
         }
     }
 }

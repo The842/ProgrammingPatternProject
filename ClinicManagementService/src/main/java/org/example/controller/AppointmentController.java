@@ -41,7 +41,7 @@ public class AppointmentController {
         AppointmentModel existingAppointment = AppointmentDML.getAppointmentById(appointmentId);
 
         if (existingAppointment != null) {
-            existingAppointment.setAppointmentDate(newAppointmentDate);
+            existingAppointment.setAppointmentDate(String.valueOf(newAppointmentDate));
             existingAppointment.setAppointmentTime(newAppointmentTime);
             AppointmentDML.updateAppointment(existingAppointment);
             System.out.println("Appointment rescheduled successfully.");
