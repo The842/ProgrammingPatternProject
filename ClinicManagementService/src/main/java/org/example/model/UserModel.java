@@ -82,6 +82,8 @@ public abstract class UserModel implements Login {
                 '}';
     }
 
+    public abstract UserModel createUser(String lastName, int id, String firstName, String phoneNumber, String address);
+
     public abstract boolean isUserValid(int id, String lastName);
 
 
@@ -92,7 +94,8 @@ public abstract class UserModel implements Login {
      * @return true if the id is positive and false if negative
      */
     boolean isValidId(int id) {
-        return id > 0;
+
+        return id <= 0;
     }
 
     /**
@@ -103,9 +106,9 @@ public abstract class UserModel implements Login {
      */
     boolean isValidLastName(String lastName) {
         if (lastName != null && !lastName.isEmpty() && lastName.matches("[a-zA-Z]+")) {
-            return true;
-        } else {
             return false;
+        } else {
+            return true;
         }
     }
 }

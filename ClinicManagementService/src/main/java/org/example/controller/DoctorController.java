@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DoctorController {
 
-    private DoctorModel doctor;
+    private final DoctorModel doctor;
 
     public DoctorController(DoctorModel doctor) {
         this.doctor = doctor;
@@ -44,7 +44,7 @@ public class DoctorController {
     /**
      * Add a new appointment for the doctor into the database.
      */
-    public void addAppointment(int id, java.util.Date appointmentDate, java.sql.Time appointmentTime, int patientID) {
+    public void addAppointment(int id, Date appointmentDate, Time appointmentTime, int patientID) {
         AppointmentModel appointment = new AppointmentModel(id, appointmentDate, appointmentTime, doctor.getId(), patientID);
         AppointmentDML.addAppointment(appointment);
         System.out.println("Appointment added successfully.");
@@ -83,13 +83,13 @@ public class DoctorController {
         System.out.println("Medical record added successfully.");
     }
 
-    public void updateMedicalRecord(int id, String newDiagnosis, double newBill, Treatment newTreatment) {
+    public void updateMedicalRecord(int id, String newDiagnosis, double newBill, Treatment treatment) {
         MedicalRecordModel record = MedicalRecordDML.getMedicalRecordById(id);
 
         if (record != null) {
             record.setDiagnosis(newDiagnosis);
             record.setBill(newBill);
-            record.setTreatment(newTreatment);
+            record.setTreatment(treatment);
 
             MedicalRecordDML.updateMedicalRecord(record);
 

@@ -2,6 +2,7 @@ package org.example.controller;
 
 import org.example.model.MedicalRecordModel;
 import org.example.model.Treatment;
+
 import org.example.util.MedicalRecordDML;
 
 public class MedicalRecordController {

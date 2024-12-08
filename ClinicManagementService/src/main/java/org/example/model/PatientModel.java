@@ -1,8 +1,13 @@
 package org.example.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Setter
+@Getter
 public class PatientModel extends UserModel {
     private int patientId;
     private List<PatientModel> patients;
@@ -13,27 +18,28 @@ public class PatientModel extends UserModel {
 
     }
 
-    public List<PatientModel> getPatients() {
-        return patients;
-    }
-
-    public void setPatients(List<PatientModel> patients) {
-        this.patients = patients;
-    }
-
-    public int getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(int patientId) {
-        this.patientId = patientId;
-    }
-
     @Override
     public String toString() {
         return "PatientModel{" +
                 "patients=" + patients +
                 '}';
+    }
+
+    @Override
+    public UserModel createUser(String lastName, int id, String firstName, String phoneNumber, String address) {
+        return new PatientModel(lastName, id, firstName, phoneNumber, address);
+    }
+
+    public PatientMemento save() {
+        return new PatientMemento(getLastName(), getId(), getFirstName(), getPhoneNumber(), getAddress());
+    }
+
+    public void restore(PatientMemento memento) {
+        setLastName(memento.getLastName());
+        setId(memento.getId());
+        setFirstName(memento.getFirstName());
+        setPhoneNumber(memento.getPhoneNumber());
+        setAddress(memento.getAddress());
     }
 
     /**
@@ -43,12 +49,12 @@ public class PatientModel extends UserModel {
      */
     @Override
     public boolean isUserValid(int id, String lastName) {
-        if (!isValidId(id)) {
+        if (isValidId(id)) {
             System.out.println("Invalid ID. ID should  be positive numbers.");
             return false;
         }
 
-        if (!isValidLastName(lastName)) {
+        if (isValidLastName(lastName)) {
             System.out.println("Invalid last name. Last name should contain letters.");
             return false;
         }

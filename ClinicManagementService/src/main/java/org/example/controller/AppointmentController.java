@@ -8,10 +8,6 @@ import java.util.Date;
 
 public class AppointmentController {
 
-    public AppointmentController() {
-        AppointmentDML appointmentDML = new AppointmentDML();
-    }
-
     /**
      * Schedule a new appointment for a patient.
      * @param doctorId the ID of the doctor
