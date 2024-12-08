@@ -8,10 +8,6 @@ import java.util.Date;
 
 public class AppointmentController {
 
-    public AppointmentController() {
-        AppointmentDML appointmentDML = new AppointmentDML();
-    }
-
     /**
      * Schedule a new appointment for a patient.
      * @param doctorId the ID of the doctor
@@ -41,7 +37,7 @@ public class AppointmentController {
         AppointmentModel existingAppointment = AppointmentDML.getAppointmentById(appointmentId);
 
         if (existingAppointment != null) {
-            existingAppointment.setAppointmentDate(String.valueOf(newAppointmentDate));
+            existingAppointment.setAppointmentDate(newAppointmentDate);
             existingAppointment.setAppointmentTime(newAppointmentTime);
             AppointmentDML.updateAppointment(existingAppointment);
             System.out.println("Appointment rescheduled successfully.");

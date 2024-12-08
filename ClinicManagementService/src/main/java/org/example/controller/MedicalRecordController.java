@@ -1,15 +1,12 @@
 package org.example.controller;
 
 import org.example.model.MedicalRecordModel;
+import org.example.model.Treatment;
 import org.example.util.MedicalRecordDML;
 
 public class MedicalRecordController {
 
     private MedicalRecordDML medicalRecordDML;
-
-    public MedicalRecordController() {
-        this.medicalRecordDML = new MedicalRecordDML();
-    }
 
     /**
      * View the medical record of a patient by their patient ID.
@@ -30,14 +27,14 @@ public class MedicalRecordController {
      * Update the medical record for a patient.
      * @param patientId the ID of the patient whose record will be updated
      * @param newDiagnosis the new diagnosis to update
-     * @param newTreatment the new treatment plan to update
+     * @param treatment the new treatment plan to update
      */
-    public void updateMedicalRecord(int patientId, String newDiagnosis, String newTreatment) {
+    public void updateMedicalRecord(int patientId, String newDiagnosis, Treatment treatment) {
         MedicalRecordModel medicalRecord = MedicalRecordDML.getMedicalRecordById(patientId);
 
         if (medicalRecord != null) {
             medicalRecord.setDiagnosis(newDiagnosis);
-            medicalRecord.setTreatment(newTreatment);
+            medicalRecord.setTreatment(treatment);
 
             MedicalRecordDML.updateMedicalRecord(medicalRecord);
             System.out.println("Medical Record updated successfully for Patient ID: " + patientId);

@@ -11,11 +11,9 @@ import java.util.List;
 
 public class PatientController {
 
-    private final AppointmentDML appointmentDML;
     private final PatientDML patientDML;
 
     public PatientController() {
-        appointmentDML = new AppointmentDML();
         patientDML = new PatientDML();
     }
 
@@ -62,10 +60,10 @@ public class PatientController {
     /**
      * Update an existing appointment for a patient.
      */
-    public void updateAppointmentForPatient(int appointmentId, String newDate, String newTime) {
+    public void updateAppointmentForPatient(int appointmentId, Date date, String newTime) {
         AppointmentModel appointment = AppointmentDML.getAppointmentById(appointmentId);
         if (appointment != null) {
-            appointment.setAppointmentDate(newDate);
+            appointment.setAppointmentDate(date);
             appointment.setAppointmentTime(Time.valueOf(newTime));
             AppointmentDML.updateAppointment(appointment);
             System.out.println("Appointment updated successfully.");
