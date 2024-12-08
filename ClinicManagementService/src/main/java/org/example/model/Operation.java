@@ -1,7 +1,15 @@
 package org.example.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.util.Date;
 
+@Getter
+@Setter
+@ToString
 public class Operation extends Treatment {
     private String surgeonName;
     private Date date;
@@ -10,29 +18,5 @@ public class Operation extends Treatment {
         super(name, description);
         this.surgeonName = surgeonName;
         this.date = date;
-    }
-
-    public String getSurgeonName() {
-        return surgeonName;
-    }
-
-    public void setSurgeonName(String surgeonName) {
-        this.surgeonName = surgeonName;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    @Override
-    public String toString() {
-        return "Operation{" +
-                "surgeonName='" + surgeonName + '\'' +
-                ", date=" + date +
-                '}';
     }
 }

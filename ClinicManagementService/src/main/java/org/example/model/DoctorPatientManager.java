@@ -1,8 +1,11 @@
 package org.example.model;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class DoctorPatientManager {
 
     private static DoctorPatientManager instance;
@@ -15,6 +18,10 @@ public class DoctorPatientManager {
         patients = new ArrayList<>();
     }
 
+    /**
+     * This method get an instance of the objects
+     * @return the instance
+     */
     public static DoctorPatientManager getInstance() {
         if (instance == null) {
             synchronized (DoctorPatientManager.class) {
@@ -24,13 +31,5 @@ public class DoctorPatientManager {
             }
         }
         return instance;
-    }
-
-    public List<DoctorModel> getDoctors() {
-        return doctors;
-    }
-
-    public List<PatientModel> getPatients() {
-        return patients;
     }
 }
