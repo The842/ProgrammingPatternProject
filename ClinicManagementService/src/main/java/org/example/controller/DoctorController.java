@@ -83,30 +83,30 @@ public class DoctorController {
         System.out.println("Medical record added successfully.");
     }
 
-    public void updateMedicalRecord(int id, String newDiagnosis, double newBill, Treatment treatment) {
-        MedicalRecordModel record = MedicalRecordDML.getMedicalRecordById(id);
+//    public void updateMedicalRecord(int id, String newDiagnosis, double newBill, Treatment treatment) {
+//        MedicalRecordModel record = MedicalRecordDML.getMedicalRecordById(id);
+//
+//        if (record != null) {
+//            record.setDiagnosis(newDiagnosis);
+//            record.setBill(newBill);
+//            record.setTreatment(treatment);
+//
+//            MedicalRecordDML.updateMedicalRecord(record);
+//
+//            System.out.println("Medical record updated successfully.");
+//        } else {
+//            System.out.println("Medical record not found.");
+//        }
+//    }
 
-        if (record != null) {
-            record.setDiagnosis(newDiagnosis);
-            record.setBill(newBill);
-            record.setTreatment(treatment);
-
-            MedicalRecordDML.updateMedicalRecord(record);
-
-            System.out.println("Medical record updated successfully.");
-        } else {
-            System.out.println("Medical record not found.");
-        }
-    }
-
-    public void deleteMedicalRecord(int id) {
-        MedicalRecordModel record = MedicalRecordDML.getMedicalRecordById(id);
-
-        if (record != null) {
-            MedicalRecordDML.deleteMedicalRecord(id);
-            System.out.println("Medical record deleted successfully.");
-        } else {
-            System.out.println("Medical record not found.");
-        }
-    }
+//    public void deleteMedicalRecord(int id) {
+//        MedicalRecordModel record = MedicalRecordDML.getMedicalRecordById(id);
+//
+//        if (record != null) {
+//            MedicalRecordDML.deleteMedicalRecord(id);
+//            System.out.println("Medical record deleted successfully.");
+//        } else {
+//            System.out.println("Medical record not found.");
+//        }
+//    }
 }

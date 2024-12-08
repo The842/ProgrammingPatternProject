@@ -3,6 +3,8 @@ package org.example.controller;
 import org.example.model.*;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class DatabaseController {
@@ -207,7 +209,7 @@ public class DatabaseController {
 
     /**
      * Adds treatment based on either medicine or operation
-     * @param treatment
+     * @param treatment treatment to add
      */
     public static void insertTreatment(Treatment treatment) {
         LOCK.writeLock().lock();
@@ -284,4 +286,147 @@ public class DatabaseController {
             LOCK.writeLock().unlock();
         }
     }
+
+    /**
+     * Deletes a patient by its id
+     * @param patientId id of the patient to delete
+     */
+    public static void deletePatient(int patientId) {
+        LOCK.writeLock().lock();
+        String sql = "DELETE FROM patient WHERE id = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, patientId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.writeLock().unlock();
+        }
+    }
+
+    /**
+     * Query patients by id
+     * @param patientId id of patient to select
+     * @return
+     */
+    public static PatientModel getPatientById(int patientId) {
+        LOCK.readLock().lock();
+        String sql = "SELECT * FROM patient WHERE id = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, patientId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new PatientModel(
+                        resultSet.getString("lastName"),
+                        resultSet.getInt("id"),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("phoneNumber"),
+                        resultSet.getString("address")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.readLock().unlock();
+        }
+        return null;
+    }
+
+    /**
+     * view all patients
+     * @return list of the patients in the system
+     */
+    public static List<PatientModel> getAllPatients() {
+        LOCK.readLock().lock();
+        List<PatientModel> patients = new ArrayList<>();
+        String sql = "SELECT * FROM patient";
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                patients.add(new PatientModel(
+                        resultSet.getString("lastName"),
+                        resultSet.getInt("id"),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("phoneNumber"),
+                        resultSet.getString("address")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.readLock().unlock();
+        }
+        return patients;
+    }
+
+    /**
+     * View all patients os a specific doctor
+     * @param doctorId id of the doctor
+     * @return the list of patients of that doctor
+     */
+    public static List<PatientModel> getPatientsByDoctorId(int doctorId) {
+        LOCK.readLock().lock();
+        List<PatientModel> patients = new ArrayList<>();
+        String sql = """
+                SELECT p.* FROM patient p
+                JOIN appointment a ON p.id = a.patientId
+                WHERE a.doctorId = ?
+                """;
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, doctorId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                patients.add(new PatientModel(
+                        resultSet.getString("lastName"),
+                        resultSet.getInt("id"),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("phoneNumber"),
+                        resultSet.getString("address")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.readLock().unlock();
+        }
+        return patients;
+    }
+
+    /**
+     * View doctor of a patient
+     * @param patientId id of the patient
+     * @return doctor of the patient
+     */
+    public static DoctorModel getDoctorByPatientId(int patientId) {
+        LOCK.readLock().lock();
+        String sql = """
+                SELECT d.* FROM doctor d
+                JOIN appointment a ON d.id = a.doctorId
+                WHERE a.patientId = ?
+                """;
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, patientId);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return new DoctorModel(
+                        resultSet.getString("lastName"),
+                        resultSet.getInt("id"),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("phoneNumber"),
+                        resultSet.getString("address")
+                );
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.readLock().unlock();
+        }
+        return null;
+    }
+
 }
