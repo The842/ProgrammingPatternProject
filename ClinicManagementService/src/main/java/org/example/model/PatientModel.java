@@ -36,6 +36,11 @@ public class PatientModel extends UserModel {
                 '}';
     }
 
+    @Override
+    public UserModel createUser(String lastName, int id, String firstName, String phoneNumber, String address) {
+        return new PatientModel(lastName, id, firstName, phoneNumber, address);
+    }
+
     /**
      * This method check if the patient user is found in the list of patients and validates.
      *
@@ -43,12 +48,12 @@ public class PatientModel extends UserModel {
      */
     @Override
     public boolean isUserValid(int id, String lastName) {
-        if (!isValidId(id)) {
+        if (isValidId(id)) {
             System.out.println("Invalid ID. ID should  be positive numbers.");
             return false;
         }
 
-        if (!isValidLastName(lastName)) {
+        if (isValidLastName(lastName)) {
             System.out.println("Invalid last name. Last name should contain letters.");
             return false;
         }

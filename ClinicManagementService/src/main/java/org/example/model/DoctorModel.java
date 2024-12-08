@@ -26,6 +26,11 @@ public class DoctorModel extends UserModel {
                 '}';
     }
 
+    @Override
+    public UserModel createUser(String lastName, int id, String firstName, String phoneNumber, String address) {
+        return new DoctorModel(lastName, id, firstName, phoneNumber, address);
+    }
+
     /**
      * This method check if the doctor user is found in the list of doctors and validates.
      *
@@ -33,12 +38,12 @@ public class DoctorModel extends UserModel {
      */
     @Override
     public boolean isUserValid(int id, String lastName) {
-        if (!isValidId(id)) {
+        if (isValidId(id)) {
             System.out.println("Invalid ID. ID should  be positive numbers.");
             return false;
         }
 
-        if (!isValidLastName(lastName)) {
+        if (isValidLastName(lastName)) {
             System.out.println("Invalid last name. Last name should contain letters.");
             return false;
         }
