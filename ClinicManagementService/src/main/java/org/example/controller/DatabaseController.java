@@ -38,6 +38,7 @@ public class DatabaseController {
                 """;
         executeSQL(sql);
     }
+
     /**
      * create patient table
      */
@@ -53,6 +54,7 @@ public class DatabaseController {
                 """;
         executeSQL(sql);
     }
+
     /**
      * create appointment table
      */
@@ -70,6 +72,7 @@ public class DatabaseController {
                 """;
         executeSQL(sql);
     }
+
     /**
      * create treatment table
      */
@@ -84,6 +87,7 @@ public class DatabaseController {
                 """;
         executeSQL(sql);
     }
+
     /**
      * create medicine table
      */
@@ -98,6 +102,7 @@ public class DatabaseController {
                 """;
         executeSQL(sql);
     }
+
     /**
      * create operation table
      */
@@ -112,6 +117,7 @@ public class DatabaseController {
                 """;
         executeSQL(sql);
     }
+
     /**
      * create medical record table
      */
@@ -140,6 +146,7 @@ public class DatabaseController {
 
     /**
      * Adds a doctor
+     *
      * @param doctor doctor to insert
      */
     public static void insertDoctor(DoctorModel doctor) {
@@ -163,6 +170,7 @@ public class DatabaseController {
 
     /**
      * Adds a patient
+     *
      * @param patient patient to add
      */
     public static void insertPatient(PatientModel patient) {
@@ -186,6 +194,7 @@ public class DatabaseController {
 
     /**
      * Adds an appointment
+     *
      * @param appointment appointment to add
      */
     public static void insertAppointment(AppointmentModel appointment) {
@@ -209,6 +218,7 @@ public class DatabaseController {
 
     /**
      * Adds treatment based on either medicine or operation
+     *
      * @param treatment treatment to add
      */
     public static void insertTreatment(Treatment treatment) {
@@ -237,9 +247,10 @@ public class DatabaseController {
 
     /**
      * Helper method for inserting treatment. It inserts medicine information if the treatment is medicine
+     *
      * @param medicine medicine to add
      */
-    private static void insertMedicine(Medicine medicine)  {
+    private static void insertMedicine(Medicine medicine) {
         String sql = "INSERT INTO medicine (id, doctorId) VALUES (?, ?)";
 
         try (Connection connection = getConnection();
@@ -247,11 +258,12 @@ public class DatabaseController {
             statement.setLong(1, medicine.getId());
             statement.setLong(2, medicine.getDoctorId());
             statement.executeUpdate();
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-    private static void insertOperation(Operation operation)  {
+
+    private static void insertOperation(Operation operation) {
         String sql = "INSERT INTO operation (id, surgeonName, operationDate) VALUES (?, ?, ?)";
 
         try (Connection connection = getConnection();
@@ -260,13 +272,14 @@ public class DatabaseController {
             statement.setString(2, operation.getSurgeonName());
             statement.setString(3, operation.getDate().toString());
             statement.executeUpdate();
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
      * Adds a medical record
+     *
      * @param record record to insert
      */
     public static void insertMedicalRecord(MedicalRecordModel record) {
@@ -289,6 +302,7 @@ public class DatabaseController {
 
     /**
      * Deletes a patient by its id
+     *
      * @param patientId id of the patient to delete
      */
     public static void deletePatient(int patientId) {
@@ -307,6 +321,7 @@ public class DatabaseController {
 
     /**
      * Query patients by id
+     *
      * @param patientId id of patient to select
      * @return
      */
@@ -336,6 +351,7 @@ public class DatabaseController {
 
     /**
      * view all patients
+     *
      * @return list of the patients in the system
      */
     public static List<PatientModel> getAllPatients() {
@@ -364,6 +380,7 @@ public class DatabaseController {
 
     /**
      * View all patients os a specific doctor
+     *
      * @param doctorId id of the doctor
      * @return the list of patients of that doctor
      */
@@ -398,6 +415,7 @@ public class DatabaseController {
 
     /**
      * View doctor of a patient
+     *
      * @param patientId id of the patient
      * @return doctor of the patient
      */
@@ -429,4 +447,206 @@ public class DatabaseController {
         return null;
     }
 
+    /**
+     * Reschedule an appointment
+     *
+     * @param appointment appointment to reschedule
+     */
+    public static void updateAppointment(AppointmentModel appointment) {
+        LOCK.writeLock().lock();
+        String sql = "UPDATE appointment SET appointmentDate = ?, appointmentTime = ?, doctorId = ?, patientId = ? WHERE id = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, appointment.getAppointmentDate().toString());
+            statement.setString(2, appointment.getAppointmentTime().toString());
+            statement.setInt(3, appointment.getDoctorID());
+            statement.setInt(4, appointment.getPatientID());
+            statement.setInt(5, appointment.getAppointmentId());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.writeLock().unlock();
+        }
+    }
+
+    /**
+     * Deletes appointment by id
+     * @param appointmentId id of the appointment to delete
+     */
+    public static void deleteAppointment(int appointmentId) {
+        LOCK.writeLock().lock();
+        String sql = "DELETE FROM appointment WHERE id = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, appointmentId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.writeLock().unlock();
+        }
+    }
+
+    /**
+     * View all appointment of a patient
+     * @param patientId id of the patients
+     * @return list of appointments of a patient
+     */
+    public static List<AppointmentModel> getAppointmentsByPatientId(int patientId) {
+        LOCK.readLock().lock();
+        List<AppointmentModel> appointments = new ArrayList<>();
+        String sql = "SELECT * FROM appointment WHERE patientId = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, patientId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                appointments.add(new AppointmentModel(
+                        resultSet.getInt("id"),
+                        Date.valueOf(resultSet.getString("appointmentDate")),
+                        Time.valueOf(resultSet.getString("appointmentTime")),
+                        resultSet.getInt("doctorId"),
+                        resultSet.getInt("patientId")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.readLock().unlock();
+        }
+        return appointments;
+    }
+
+    /**
+     * View appointments of a specific doctor
+     * @param doctorId id of the doctor
+     * @return list of appointments of a doctor
+     */
+    public static List<AppointmentModel> getAppointmentsByDoctorId(int doctorId) {
+        LOCK.readLock().lock();
+        List<AppointmentModel> appointments = new ArrayList<>();
+        String sql = "SELECT * FROM appointment WHERE doctorId = ?";
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, doctorId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                appointments.add(new AppointmentModel(
+                        resultSet.getInt("id"),
+                        Date.valueOf(resultSet.getString("appointmentDate")),
+                        Time.valueOf(resultSet.getString("appointmentTime")),
+                        resultSet.getInt("doctorId"),
+                        resultSet.getInt("patientId")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.readLock().unlock();
+        }
+        return appointments;
+    }
+
+    /**
+     * View all medical records
+     * @return a list of medical records
+     */
+    public static List<MedicalRecordModel> getAllMedicalRecords() {
+        LOCK.readLock().lock();
+        List<MedicalRecordModel> records = new ArrayList<>();
+        String sql = """
+            SELECT mr.id, mr.appointmentId, mr.bill, t.id AS treatmentId, t.name AS treatmentName, 
+                   t.description AS treatmentDescription, t.type AS treatmentType
+            FROM medicalRecord mr
+            JOIN treatment t ON mr.treatmentId = t.id
+            """;
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                // Fetch the treatment based on result set
+                Treatment treatment = buildTreatmentFromResultSet(resultSet);
+                // Create and add the medical record model
+                records.add(new MedicalRecordModel(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("appointmentId"),
+                        treatment.getDescription(),
+                        treatment,
+                        resultSet.getDouble("bill")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.readLock().unlock();
+        }
+        return records;
+    }
+
+    /**
+     * View all medical records of a patient
+     * @param patientId id of patient
+     * @return a list of medical records of a patient
+     */
+    public static List<MedicalRecordModel> getMedicalRecordsByPatientId(int patientId) {
+        LOCK.readLock().lock();
+        List<MedicalRecordModel> records = new ArrayList<>();
+        String sql = """
+            SELECT mr.id, mr.appointmentId, mr.bill, t.id AS treatmentId, t.name AS treatmentName, 
+                   t.description AS treatmentDescription, t.type AS treatmentType
+            FROM medicalRecord mr
+            JOIN appointment a ON mr.appointmentId = a.id
+            JOIN treatment t ON mr.treatmentId = t.id
+            WHERE a.patientId = ?
+            """;
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, patientId);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                // Fetch the treatment based on result set
+                Treatment treatment = buildTreatmentFromResultSet(resultSet);
+                // Create and add the medical record model
+                records.add(new MedicalRecordModel(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("appointmentId"),
+                        treatment.getDescription(),
+                        treatment,
+                        resultSet.getDouble("bill")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.readLock().unlock();
+        }
+        return records;
+    }
+
+    /**
+     * Helper method to be able to access treatment detail
+     * @param resultSet retrieved data from database
+     * @return details of treatment
+     * @throws SQLException
+     */
+    private static Treatment buildTreatmentFromResultSet(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt("treatmentId");
+        String name = resultSet.getString("treatmentName");
+        String description = resultSet.getString("treatmentDescription");
+        String type = resultSet.getString("treatmentType");
+
+        if ("Medicine".equalsIgnoreCase(type)) {
+            int doctorId = resultSet.getInt("doctorId");
+            return new Medicine(id, name, description, doctorId);
+        } else if ("Operation".equalsIgnoreCase(type)) {
+            String surgeonName = resultSet.getString("surgeonName");
+            Date date = Date.valueOf(resultSet.getString("operationDate"));
+            return new Operation(id, name, description, surgeonName, date);
+        } else {
+            return new Treatment(id, name, description);
+        }
+    }
 }
+
+

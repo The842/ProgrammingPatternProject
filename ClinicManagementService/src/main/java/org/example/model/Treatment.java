@@ -11,7 +11,6 @@ public class Treatment {
     private int id;
     private String name;
     private String description;
-    private DoctorModel doctor;
 
     public Treatment(int id,String name, String description) {
         this.id=id;
