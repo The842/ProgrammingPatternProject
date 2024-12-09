@@ -143,6 +143,24 @@ public class DatabaseController {
             throw new RuntimeException(e);
         }
     }
+    /**
+     * Initialize all tables in the database.
+     */
+    public static void initializeDatabase() {
+        LOCK.writeLock().lock();
+        try {
+            createDoctorTable();
+            createPatientTable();
+            createAppointmentTable();
+            createTreatmentTable();
+            createMedicineTable();
+            createOperationTable();
+            createMedicalRecordTable();
+        } finally {
+            LOCK.writeLock().unlock();
+        }
+    }
+
 
     /**
      * Adds a doctor
