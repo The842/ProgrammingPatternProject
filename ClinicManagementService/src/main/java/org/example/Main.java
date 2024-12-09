@@ -34,6 +34,7 @@ public class Main {
 //        // View all doctors and patients
         testViewAllDoctors();
         testViewAllPatients();
+        testAddMedicalRecord();
 //
 //        // View appointments by patient ID and doctor ID
         testViewAppointmentsByPatientId(1);
@@ -71,7 +72,7 @@ public class Main {
         AppointmentModel appointment = new AppointmentModel(0, Date.valueOf("2024-11-10"), Time.valueOf("12:30:00"), 1, 1);
         AppointmentController appointmentController = new AppointmentController();
         appointmentController.addNewAppointment(appointment);
-        System.out.println("Appointment added successfully.");
+        System.out.println("Appointment added successfull        Treatment treatment = new Treatment(1, \"General Checkup\", \"General health checkup\");\ny.");
     }
 
     // Test adding a new treatment (Generic Treatment)
@@ -91,7 +92,14 @@ public class Main {
     // Test adding a new operation
     public static void testAddOperation() {
         Operation operation = new Operation(3, "Heart Surgery", "Surgery for heart issues", "Dr. Smith", Date.valueOf("2024-12-15"));
-        DatabaseController.insertTreatment(operation);
+        DatabaseController.insertTreatment(op        Treatment treatment = new Treatment(1, "General Checkup", "General health checkup");
+        eration);
+        System.out.println("Operation added successfully.");
+    }
+    public static void testAddMedicalRecord() {
+        MedicalRecordController medicalRecordController = new MedicalRecordController();
+        MedicalRecordModel medicalRecord=new MedicalRecordModel( 1,  1, "diagnosis",  treatment,  1000);
+        medicalRecordController.addMedicalRecord( medicalRecord);
         System.out.println("Operation added successfully.");
     }
 

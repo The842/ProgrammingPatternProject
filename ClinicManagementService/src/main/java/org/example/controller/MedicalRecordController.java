@@ -19,7 +19,7 @@ public class MedicalRecordController {
      *
      * @param medicalRecord The medical record to add.
      */
-    public void addMedicalRecord(MedicalRecordModel medicalRecord) {
+    public  void addMedicalRecord(MedicalRecordModel medicalRecord) {
         threadPool.submit(() -> {
             try {
                 DatabaseController.insertTreatment(medicalRecord.getTreatment());
