@@ -11,6 +11,7 @@ public class PatientController {
 
     /**
      * Add a new patient to the database
+     *
      * @param patient patient to add
      */
     public void addNewPatient(PatientModel patient) {
@@ -21,29 +22,39 @@ public class PatientController {
 
     /**
      * Delete a patient by ID
+     *
      * @param patientId patient id to delete
      */
     public void deletePatientById(int patientId) {
         threadPool.submit(() -> {
-            DatabaseController.deletePatient(patientId);
-            System.out.println("Patient deleted successfully.");
+            try {
+                DatabaseController.deletePatient(patientId);
+                System.out.println("Patient deleted successfully.");
+            } catch (Exception e) {
+                System.out.println("Failed to delete patients by id: " + e.getMessage());
+            }
         });
     }
 
     /**
-     *  View all patients in the system
+     * View all patients in the system
      */
     public void displayAllPatients() {
         threadPool.submit(() -> {
-            List<PatientModel> patients = DatabaseController.getAllPatients();
-            for (PatientModel patient : patients) {
-                System.out.println(patient);
+            try {
+                List<PatientModel> patients = DatabaseController.getAllPatients();
+                for (PatientModel patient : patients) {
+                    System.out.println(patient);
+                }
+            } catch (Exception e) {
+                System.out.println("Failed to view all patients: " + e.getMessage());
             }
         });
     }
 
     /**
      * View a specific patient by ID
+     *
      * @param patientId id of a patient
      */
     public void viewPatientById(int patientId) {
@@ -59,13 +70,18 @@ public class PatientController {
 
     /**
      * View all patients of a specific doctor
+     *
      * @param doctorId id of doctor
      */
     public void viewPatientsByDoctorId(int doctorId) {
         threadPool.submit(() -> {
-            List<PatientModel> patients = DatabaseController.getPatientsByDoctorId(doctorId);
-            for (PatientModel patient : patients) {
-                System.out.println(patient);
+            try {
+                List<PatientModel> patients = DatabaseController.getPatientsByDoctorId(doctorId);
+                for (PatientModel patient : patients) {
+                    System.out.println(patient);
+                }
+            } catch (Exception e) {
+                System.out.println("Failed to view patients by doctor: " + e.getMessage());
             }
         });
     }

@@ -412,6 +412,7 @@ public class DatabaseController {
         }
         return patients;
     }
+
     /**
      * view all doctors
      *
@@ -477,9 +478,10 @@ public class DatabaseController {
 
     /**
      * Reschedule Appointment
+     *
      * @param appointmentId id of appointment to change
-     * @param newDate new date of appointment
-     * @param newTime new time of appointment
+     * @param newDate       new date of appointment
+     * @param newTime       new time of appointment
      */
     public static void updateAppointment(int appointmentId, Date newDate, Time newTime) {
         LOCK.writeLock().lock();
@@ -499,6 +501,7 @@ public class DatabaseController {
 
     /**
      * Deletes appointment by id
+     *
      * @param appointmentId id of the appointment to delete
      */
     public static void deleteAppointment(int appointmentId) {
@@ -517,6 +520,7 @@ public class DatabaseController {
 
     /**
      * View all appointment of a patient
+     *
      * @param patientId id of the patients
      * @return list of appointments of a patient
      */
@@ -547,6 +551,7 @@ public class DatabaseController {
 
     /**
      * View appointments of a specific doctor
+     *
      * @param doctorId id of the doctor
      * @return list of appointments of a doctor
      */
@@ -577,17 +582,18 @@ public class DatabaseController {
 
     /**
      * View all medical records
+     *
      * @return a list of medical records
      */
     public static List<MedicalRecordModel> getAllMedicalRecords() {
         LOCK.readLock().lock();
         List<MedicalRecordModel> records = new ArrayList<>();
         String sql = """
-            SELECT mr.id, mr.appointmentId, mr.bill, t.id AS treatmentId, t.name AS treatmentName, 
-                   t.description AS treatmentDescription, t.type AS treatmentType
-            FROM medicalRecord mr
-            JOIN treatment t ON mr.treatmentId = t.id
-            """;
+                SELECT mr.id, mr.appointmentId, mr.bill, t.id AS treatmentId, t.name AS treatmentName, 
+                       t.description AS treatmentDescription, t.type AS treatmentType
+                FROM medicalRecord mr
+                JOIN treatment t ON mr.treatmentId = t.id
+                """;
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
@@ -613,6 +619,7 @@ public class DatabaseController {
 
     /**
      * View all medical records of a patient
+     *
      * @param patientId id of patient
      * @return a list of medical records of a patient
      */
@@ -620,13 +627,13 @@ public class DatabaseController {
         LOCK.readLock().lock();
         List<MedicalRecordModel> records = new ArrayList<>();
         String sql = """
-            SELECT mr.id, mr.appointmentId, mr.bill, t.id AS treatmentId, t.name AS treatmentName, 
-                   t.description AS treatmentDescription, t.type AS treatmentType
-            FROM medicalRecord mr
-            JOIN appointment a ON mr.appointmentId = a.id
-            JOIN treatment t ON mr.treatmentId = t.id
-            WHERE a.patientId = ?
-            """;
+                SELECT mr.id, mr.appointmentId, mr.bill, t.id AS treatmentId, t.name AS treatmentName, 
+                       t.description AS treatmentDescription, t.type AS treatmentType
+                FROM medicalRecord mr
+                JOIN appointment a ON mr.appointmentId = a.id
+                JOIN treatment t ON mr.treatmentId = t.id
+                WHERE a.patientId = ?
+                """;
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setInt(1, patientId);
@@ -653,6 +660,7 @@ public class DatabaseController {
 
     /**
      * Helper method to be able to access treatment detail
+     *
      * @param resultSet retrieved data from database
      * @return details of treatment
      * @throws SQLException

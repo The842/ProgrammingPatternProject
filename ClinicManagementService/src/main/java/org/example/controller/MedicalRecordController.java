@@ -1,64 +1,65 @@
 package org.example.controller;
 
-import org.example.model.MedicalRecordModel;
-import org.example.model.Treatment;
 
-import org.example.util.MedicalRecordDML;
+import org.example.model.MedicalRecordModel;
+
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MedicalRecordController {
-
-    private MedicalRecordDML medicalRecordDML;
+    private final ExecutorService threadPool;
 
     public MedicalRecordController() {
-        this.medicalRecordDML = new MedicalRecordDML();
+        this.threadPool = Executors.newFixedThreadPool(10);
     }
 
     /**
-     * View the medical record of a patient by their patient ID.
-     * @param patientId the ID of the patient
+     * Add a new medical record.
+     *
+     * @param medicalRecord The medical record to add.
      */
-    public void viewMedicalRecord(int patientId) {
-        MedicalRecordModel medicalRecord = MedicalRecordDML.getMedicalRecordById(patientId);
-
-        if (medicalRecord != null) {
-            System.out.println("Medical Record for Patient ID: " + patientId);
-            System.out.println(medicalRecord);
-        } else {
-            System.out.println("Medical Record not found for patient ID: " + patientId);
-        }
+    public void addMedicalRecord(MedicalRecordModel medicalRecord) {
+        threadPool.submit(() -> {
+            try {
+                DatabaseController.insertTreatment(medicalRecord.getTreatment());
+                DatabaseController.insertMedicalRecord(medicalRecord);
+                System.out.println("Medical record added successfully.");
+            } catch (Exception e) {
+                System.err.println("Error adding medical record: " + e.getMessage());
+            }
+        });
     }
 
     /**
-     * Update the medical record for a patient.
-     * @param patientId the ID of the patient whose record will be updated
-     * @param newDiagnosis the new diagnosis to update
-     * @param newTreatment the new treatment plan to update
+     * View all medical records.
      */
-    public void updateMedicalRecord(int patientId, String newDiagnosis, Treatment newTreatment) {
-        MedicalRecordModel medicalRecord = MedicalRecordDML.getMedicalRecordById(patientId);
-
-        if (medicalRecord != null) {
-            medicalRecord.setDiagnosis(newDiagnosis);
-            medicalRecord.setTreatment(newTreatment);
-
-            MedicalRecordDML.updateMedicalRecord(medicalRecord);
-            System.out.println("Medical Record updated successfully for Patient ID: " + patientId);
-        } else {
-            System.out.println("Medical Record not found for patient ID: " + patientId);
-        }
+    public void viewAllMedicalRecords() {
+        threadPool.submit(() -> {
+            try {
+                List<MedicalRecordModel> records = DatabaseController.getAllMedicalRecords();
+                System.out.println("All Medical Records:");
+                records.forEach(System.out::println);
+            } catch (Exception e) {
+                System.err.println("Error fetching medical records: " + e.getMessage());
+            }
+        });
     }
 
     /**
-     * View a medical record by its ID.
-     * @param medicalRecordId the ID of the medical record
+     * View all medical records for a specific patient.
+     *
+     * @param patientId The ID of the patient.
      */
-    public void viewMedicalRecordById(int medicalRecordId) {
-        MedicalRecordModel medicalRecord = MedicalRecordDML.getMedicalRecordById(medicalRecordId);
-
-        if (medicalRecord != null) {
-            System.out.println("Medical Record Details: " + medicalRecord);
-        } else {
-            System.out.println("Medical Record not found.");
-        }
+    public void viewMedicalRecordsByPatientId(int patientId) {
+        threadPool.submit(() -> {
+            try {
+                List<MedicalRecordModel> records = DatabaseController.getMedicalRecordsByPatientId(patientId);
+                System.out.println("Medical Records for Patient ID " + patientId + ":");
+                records.forEach(System.out::println);
+            } catch (Exception e) {
+                System.err.println("Error fetching medical records for patient: " + e.getMessage());
+            }
+        });
     }
 }

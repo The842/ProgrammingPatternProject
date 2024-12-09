@@ -8,10 +8,11 @@ import java.util.concurrent.Executors;
 
 public class DoctorController {
 
-private final ExecutorService threadPool = Executors.newFixedThreadPool(10);
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(10);
 
     /**
-     *  Add a new doctor to the database
+     * Add a new doctor to the database
+     *
      * @param doctor doctor to add
      */
     public void addNewDoctor(DoctorModel doctor) {
@@ -21,18 +22,23 @@ private final ExecutorService threadPool = Executors.newFixedThreadPool(10);
     }
 
     /**
-     *  View all doctors in the system
-      */
+     * View all doctors in the system
+     */
     public void displayAllDoctors() {
         threadPool.submit(() -> {
-            for (DoctorModel doctor : DatabaseController.getAllDoctors()) {
-                System.out.println(doctor);
+            try {
+                for (DoctorModel doctor : DatabaseController.getAllDoctors()) {
+                    System.out.println(doctor);
+                }
+            } catch (Exception e) {
+                System.out.println("Failed to view all doctors: " + e.getMessage());
             }
         });
     }
 
     /**
      * View the doctor assigned to a specific patient
+     *
      * @param patientId id of patient
      */
     public void viewDoctorByPatientId(int patientId) {

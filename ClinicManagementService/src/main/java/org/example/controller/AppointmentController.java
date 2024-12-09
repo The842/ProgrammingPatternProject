@@ -13,6 +13,7 @@ public class AppointmentController {
 
     /**
      * Add a new appointment
+     *
      * @param appointment appointment to add
      */
     public void addNewAppointment(AppointmentModel appointment) {
@@ -24,30 +25,41 @@ public class AppointmentController {
 
     /**
      * Reschedule Appointment
+     *
      * @param appointmentId id of appointment to change
-     * @param newDate new date of appointment
-     * @param newTime new time of appointment
+     * @param newDate       new date of appointment
+     * @param newTime       new time of appointment
      */
     public void updateAppointment(int appointmentId, Date newDate, Time newTime) {
         threadPool.submit(() -> {
-            DatabaseController.updateAppointment(appointmentId, newDate, newTime);
-            System.out.println("Appointment updated successfully.");
+            try {
+                DatabaseController.updateAppointment(appointmentId, newDate, newTime);
+                System.out.println("Appointment updated successfully.");
+            } catch (Exception e) {
+                System.out.println("Failed to update appointment: " + e.getMessage());
+            }
         });
     }
 
     /**
-     // Delete an appointment by ID
+     * // Delete an appointment by ID
+     *
      * @param appointmentId
      */
     public void deleteAppointmentById(int appointmentId) {
         threadPool.submit(() -> {
-            DatabaseController.deleteAppointment(appointmentId);
-            System.out.println("Appointment deleted successfully.");
+            try {
+                DatabaseController.deleteAppointment(appointmentId);
+                System.out.println("Appointment deleted successfully.");
+            } catch (Exception e) {
+                System.out.println("Failed to delete appointment by id: " + e.getMessage());
+            }
         });
     }
 
     /**
      * View all appointments of a specific patient
+     *
      * @param patientId id of patient to check
      */
     public void displayAppointmentsByPatientId(int patientId) {
@@ -63,6 +75,7 @@ public class AppointmentController {
 
     /**
      * View all appointments of a specific doctor
+     *
      * @param doctorId id of doctor
      */
     public void displayAppointmentsByDoctorId(int doctorId) {
