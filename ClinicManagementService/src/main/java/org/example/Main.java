@@ -8,52 +8,38 @@ import javax.swing.*;
 import java.sql.Date;
 import java.sql.Time;
 
-import static org.example.controller.DatabaseController.initializeDatabase;
 
 public class Main {
     public static void main(String[] args) {
 
         // Create the main frame
-       // JFrame primaryStage = new JFrame();
-        //primaryStage.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Initialize the controller and pass the JFrame (primaryStage)
-      //  new MainFrameController();
+       new MainFrameController();
 
-//        initializeDatabase();
-//        // Test adding doctors, patients, and appointments
-       // testAddDoctor();
-        testAddPatient();
-        testAddAppointment();
-//
-//        // Test adding a new treatment, medicine, and operation
-        //testAddTreatment();
-        //testAddMedicine();
-        //testAddOperation();
-//
-//        // View all doctors and patients
+
         testViewAllDoctors();
         testViewAllPatients();
-        testAddMedicalRecord();
-//
-//        // View appointments by patient ID and doctor ID
+
+
+        // View appointments by patient ID and doctor ID
         testViewAppointmentsByPatientId(1);
         testViewAppointmentsByDoctorId(1);
-//
-//        // Test viewing medical records by patient ID
+
+        // Test viewing medical records by patient ID
         testViewMedicalRecordsByPatientId(1);
-//
-//        // Test updating and deleting appointments
-//       // testUpdateAppointment(1, Date.valueOf("2024-12-10"), Time.valueOf("11:00:00"));
-//        //testDeleteAppointment(1);
-//
-//        // Test deleting a patient
-//       // testDeletePatient(1);
+
+        // Test updating and deleting appointments
+        testUpdateAppointment(1, Date.valueOf("2025-01-10"), Time.valueOf("11:00:00"));
+        testDeleteAppointment(1);
+
+        // Test deleting a patient
+        testDeletePatient(1);
     }
 
     // Test adding a new doctor
     public static void testAddDoctor() {
-        DoctorModel doctor = new DoctorModel("jimmy", 1, "ADAM", "555-1234", "123 Main St");
+        DoctorModel doctor = new DoctorModel("jimmy", 2, "ADAM", "438-766-5234", "123 behind St");
         DoctorController doctorController = new DoctorController();
         doctorController.addNewDoctor(doctor);
         System.out.println("Doctor added successfully.");
@@ -61,7 +47,7 @@ public class Main {
 
     // Test adding a new patient
     public static void testAddPatient() {
-        PatientModel patient = new PatientModel("JACK", 2, "BLACK", "555-5678", "456 Oak St");
+        PatientModel patient = new PatientModel("Willow", 2, "Sara", "525-973-5678", "421 jardin St");
         PatientController patientController = new PatientController();
         patientController.addNewPatient(patient);
         System.out.println("Patient added successfully.");
@@ -69,38 +55,38 @@ public class Main {
 
     // Test adding a new appointment
     public static void testAddAppointment() {
-        AppointmentModel appointment = new AppointmentModel(0, Date.valueOf("2024-11-10"), Time.valueOf("12:30:00"), 1, 1);
+        AppointmentModel appointment = new AppointmentModel(2, Date.valueOf("2024-12-21"), Time.valueOf("12:30:00"), 1, 1);
         AppointmentController appointmentController = new AppointmentController();
         appointmentController.addNewAppointment(appointment);
-        System.out.println("Appointment added successfull        Treatment treatment = new Treatment(1, \"General Checkup\", \"General health checkup\");\ny.");
+        System.out.println("Appointment added successfull.");
     }
 
-    // Test adding a new treatment (Generic Treatment)
+    // Test adding a new treatment
     public static void testAddTreatment() {
-        Treatment treatment = new Treatment(1, "General Checkup", "General health checkup");
+        Treatment treatment = new Treatment(7, "Emergency", "Broken Arm");
         DatabaseController.insertTreatment(treatment);
         System.out.println("Treatment added successfully.");
     }
 
     // Test adding a new medicine
     public static void testAddMedicine() {
-        Medicine medicine = new Medicine(2, "Aspirin", "Pain relief medicine", 1);
+        Medicine medicine = new Medicine(1, "Aspirin", "Pain relief medicine", 1);
         DatabaseController.insertTreatment(medicine);
         System.out.println("Medicine added successfully.");
     }
 
     // Test adding a new operation
     public static void testAddOperation() {
-        Operation operation = new Operation(3, "Heart Surgery", "Surgery for heart issues", "Dr. Smith", Date.valueOf("2024-12-15"));
-        DatabaseController.insertTreatment(op        Treatment treatment = new Treatment(1, "General Checkup", "General health checkup");
-        eration);
+        Operation operation = new Operation(1, "Heart Surgery", "Surgery for heart issues", "Dr. Smith", Date.valueOf("2024-12-15"));
+        DatabaseController.insertTreatment(operation);
         System.out.println("Operation added successfully.");
     }
     public static void testAddMedicalRecord() {
         MedicalRecordController medicalRecordController = new MedicalRecordController();
-        MedicalRecordModel medicalRecord=new MedicalRecordModel( 1,  1, "diagnosis",  treatment,  1000);
+        Treatment treatment = new Treatment(10, "General Checkup", "has a cold");
+        MedicalRecordModel medicalRecord=new MedicalRecordModel( 2,  1, "cold",  treatment,  1000);
         medicalRecordController.addMedicalRecord( medicalRecord);
-        System.out.println("Operation added successfully.");
+        System.out.println("Medical Record added successfully.");
     }
 
     // Test viewing all doctors
