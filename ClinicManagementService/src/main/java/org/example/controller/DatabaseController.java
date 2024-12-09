@@ -379,7 +379,7 @@ public class DatabaseController {
     }
 
     /**
-     * View all patients os a specific doctor
+     * View all patients of a specific doctor
      *
      * @param doctorId id of the doctor
      * @return the list of patients of that doctor
@@ -411,6 +411,34 @@ public class DatabaseController {
             LOCK.readLock().unlock();
         }
         return patients;
+    }
+    /**
+     * view all doctors
+     *
+     * @return list of the doctors in the system
+     */
+    public static List<DoctorModel> getAllDoctors() {
+        LOCK.readLock().lock();
+        List<DoctorModel> doctors = new ArrayList<>();
+        String sql = "SELECT * FROM doctor";
+        try (Connection connection = getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                doctors.add(new DoctorModel(
+                        resultSet.getString("lastName"),
+                        resultSet.getInt("id"),
+                        resultSet.getString("firstName"),
+                        resultSet.getString("phoneNumber"),
+                        resultSet.getString("address")
+                ));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            LOCK.readLock().unlock();
+        }
+        return doctors;
     }
 
     /**
