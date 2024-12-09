@@ -476,23 +476,22 @@ public class DatabaseController {
     }
 
     /**
-     * Reschedule an appointment
-     *
-     * @param appointment appointment to reschedule
+     * Reschedule Appointment
+     * @param appointmentId id of appointment to change
+     * @param newDate new date of appointment
+     * @param newTime new time of appointment
      */
-    public static void updateAppointment(AppointmentModel appointment) {
+    public static void updateAppointment(int appointmentId, Date newDate, Time newTime) {
         LOCK.writeLock().lock();
-        String sql = "UPDATE appointment SET appointmentDate = ?, appointmentTime = ?, doctorId = ?, patientId = ? WHERE id = ?";
+        String sql = "UPDATE appointment SET appointmentDate = ?, appointmentTime = ? WHERE id = ?";
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setString(1, appointment.getAppointmentDate().toString());
-            statement.setString(2, appointment.getAppointmentTime().toString());
-            statement.setInt(3, appointment.getDoctorID());
-            statement.setInt(4, appointment.getPatientID());
-            statement.setInt(5, appointment.getAppointmentId());
+            statement.setString(1, newDate.toString());
+            statement.setString(2, newTime.toString());
+            statement.setInt(3, appointmentId);
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to update appointment with ID: " + appointmentId, e);
         } finally {
             LOCK.writeLock().unlock();
         }
